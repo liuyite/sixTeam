@@ -1,136 +1,187 @@
 <template>
-    <div class="create">
-        <el-container>
-            <el-main width="750px">
-                <h3>发表新攻略</h3>
-                <p>分享你的个人游记，让更多人看到哦！</p>
-                <el-form>
-                    <el-input v-model="form.title" placeholder="请输入标题"></el-input>
-                    <div
-                        class="quill-editor"
-                        :content="form.content"
-                        v-quill:myQuillEditor="editorOption"
-                        @change="onEditorChange($event)"
-                    ></div>
-                    <div>
-                        <span>选择城市</span>
-                        <el-autocomplete
-                            class="inline-input"
-                            v-model="form.city"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入内容"
-                            :trigger-on-focus="false"
-                            @select="handleSelect"
-                        ></el-autocomplete>
-                    </div>
-                    <el-button type="primary" @click="submitBtn" class="el-button--small">提交</el-button>
-                    <span class="text">
-                        或者
-                        <nuxt-link to="#">保存到草稿</nuxt-link>
-                    </span>
-                </el-form>
-            </el-main>
-            <!-- 侧边栏 -->
-            <el-aside width="200px">
-                <!-- 添加组件"components/post/email.vue" -->
-                <email />
-            </el-aside>
-        </el-container>
-    </div>
+  <div class="contianer">
+    <el-row type="flex" justify="space-between">
+      <div class="main">
+        <h2>发表新攻略</h2>
+        <p class="create-desc">分享你的个人游记，让更多人看到</p>
+        <el-form class="main-content">
+          <el-form-item class="content-form">
+            <el-input placeholder="请输入标题" class="content-title"></el-input>
+          </el-form-item>
+          <!-- 富文本框 -->
+          <el-form-item>
+            <div class="conent-editor">
+              <VueEditor :config="config"  class="editorText"/>
+            </div>
+          </el-form-item>
+          <!-- 选择城市 -->
+          <el-form-item label="选择城市">
+            <el-autocomplete
+            :fetch-suggestions="querySearchAsync"
+            @select="handleSelect"
+            ></el-autocomplete>
+          </el-form-item>
+        </el-form>
+        <!-- 发布或保存到草稿箱 -->
+        <div class="create-button">
+            <!-- 按钮 -->
+            <el-button type="primary" size="small">发布</el-button>
+            <span class="submit-side">或者 
+                <nuxt-link to="#">保存到草稿箱</nuxt-link>
+            </span>
+        </div>
+      </div>
+      <div class="draft">
+          <div class="draft-box">
+              <h4>草稿箱(1)</h4>
+              <div class="draft-list">
+                  <div class="draft-item">
+                      <div class="draft-post-title">
+                          熊大
+                          <span><i class="el-icon-edit"></i></span>
+                          <p>2019-09-12</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </el-row>
+  </div>
 </template>
-
 <script>
-import email from "@/components/post/email";
+import "quill/dist/quill.snow.css";
+let VueEditor;
+
+if (process.browser) {
+  VueEditor = require("vue-word-editor").default;
+}
 export default {
-    components: { email },
-    data() {
-        return {
-            editorOption: {
-                /* quill options */
-            },
-            form: {
-                content: "<p>&nbsp;</p>",
-                title: "",
-                city: ""
-            }
-        };
-    },
-    methods: {
-        //城市建议
-        querySearch(value, cb) {
-            if (!value) {
-                cb([]);
-                return;
-            }
-            this.$axios({
-                url: "/airs/city",
-                params: { name: value }
-            }).then(res => {
-                const { data } = res.data;
-                data.forEach(e => {
-                    e.value = e.name;
-                });
-                cb(data);
-            });
+  data() {
+    return {
+      config: {
+        modules: {
+          // 工具栏
+          toolbar: [
+            ["bold", "italic", "underline", "strike"], // toggled buttons
+            [{ header: 1 }, { header: 2 }], // custom button values
+            ["image", "video"]
+          ]
         },
-        handleSelect(item) {},
-        submitBtn() {
-            const token = JSON.parse( localStorage.getItem('store')).user.userInfo.token
-            this.$axios({
-                url:'/posts',
-                method:'post',
-                data:this.form,
-                headers: { 'Authorization': 'Bearer ' + token}//设置header信息
-            })
-            .then(res =>{
-                if(res.status===0){
-                    this.$alert(res.message,'提示');
-                }
-            })
+        // 主题
+        theme: "snow",
+        uploadImage: {
+          url: "http://localhost:1337/upload",
+          name: "files",
+          uploadBefore(file) {
+            return true;
+          },
+          uploadProgress(res) {},
+          uploadSuccess(res, insert) {
+            insert("http://localhost:1337" + res.data[0].url);
+          },
+          uploadError() {},
+          showProgress: false
         },
-        //读取富文本内容
-        onEditorChange({ editor, html }) {
-            this.form.content = html;
+
+        uploadVideo: {
+          //url: "http://157.122.54.189:9095/upload",
+          url: "http://localhost:1337/upload",
+          name: "files",
+          uploadBefore(file) {
+            return true;
+          },
+          uploadProgress(res) {},
+          uploadSuccess(res, insert) {
+            insert("http://localhost:1337" + res.data[0].url);
+          },
+          uploadError() {}
         }
-    }
+      }
+    };
+  },
+  components: {
+    VueEditor
+  },
+  methods:{
+      // 返回输入建议的方法，仅当你的输入建议数据 resolve 时，通过调用 callback(data:[]) 来返回它 Function(queryString, callback)
+      querySearchAsync(queryString, cb){},
+
+      // select 选中 input 中的文字
+      handleSelect(item) {
+        console.log(item);
+      }
+  }
 };
 </script>
+<style lang="less" scoped>
+.contianer {
+  width: 1000px;
+  margin: 20px auto;
 
+  .main {
+    h2 {
+      font-weight: normal;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
 
-<style lang="less" scope>
-.create {
-    width: 1000px;
-    margin: 0 auto;
-    padding: 20px 0;
-    .el-main {
-        padding: 0px;
-        h3 {
-            font-weight: 400;
-            font-size: 22px;
+    p {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+  }
+}
+.main-content {
+  width: 750px;
+
+  .content-form {
+    margin-bottom: 20px;
+
+    .content-title {
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      box-sizing: border-box;
+    }
+  }
+}
+ .editorText {
+      height: 330px;
+      margin-bottom: 50px;
+  }
+.submit-side {
+    margin-left: 10px;
+    font-size: 14px;
+    > a {
+        color: orange;
+    }
+}
+
+.draft {
+    width: 200px;
+    .draft-box {
+        border: 1px #ddd solid;
+        padding: 10px;
+
+        h4 {
             margin-bottom: 10px;
-        }
-        p {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 10px;
-        }
-        .el-input__inner {
-            margin-bottom: 22px;
-        }
-        .ql-container {
-            height: 400px;
-            margin-bottom: 22px;
-        }
-        .text {
-            font-size: 14px;
-            padding-left: 10px;
-            a {
-                color: orange;
-            }
+            font-weight: normal;
+            color:#666;
         }
     }
-    .el-aside {
-        margin-left: 50px;
+}
+
+.draft-item {
+    margin-bottom: 10px;
+    font-size: 14px;
+
+    .draft-post-title {
+        cursor: pointer;
+
+        p {
+             color:#999;
+        }
     }
 }
 </style>
