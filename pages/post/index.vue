@@ -47,8 +47,11 @@
                         placeholder="请输入想去的地方，比如：'广州'"
                         v-model="searchInfo"
                         class="search-info"
+                        @keyup.enter="$router.push(`/post?city=${searchInfo}`)"
                     />
-                    <i class="el-icon-search"></i>
+                    <nuxt-link :to="`/post?city=${searchInfo}`">
+                        <i class="el-icon-search"></i>
+                    </nuxt-link>
                     <div class="search-recommend">
                         <span>推荐:</span>
                         <nuxt-link to="/post?city=广州">广州</nuxt-link>
@@ -68,7 +71,7 @@
                 <el-main>
                     <indexMain />
                 </el-main>
-                <el-footer>Footer</el-footer>
+                <el-footer></el-footer>
             </el-container>
         </el-container>
     </div>
@@ -96,12 +99,17 @@ export default {
         this.$axios({
             url: "/posts/cities"
         }).then(res => {
-            console.log(res);
+            // console.log(res);
             this.menusList = res.data.data;
             this.menusList.forEach(e => {
                 this.menuChild.push(e.children);
             });
         });
+    },
+    watch: {
+        $route() {
+            this.searchInfo = this.$route.query.city;
+        }
     }
 };
 </script>
@@ -186,10 +194,7 @@ export default {
     }
 }
 .el-footer {
-    background-color: #b3c0d1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
+    display: none;
 }
 .el-aside {
     color: #333;
@@ -236,21 +241,22 @@ export default {
 .el-main {
     // background-color: #e9eef3;
     padding: 0;
-    overflow: none;
+    // overflow: none;
+    width: 100%;
 }
 
 body > .el-container {
     margin-bottom: 40px;
 }
 
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-}
+// .el-container:nth-child(5) .el-aside,
+// .el-container:nth-child(6) .el-aside {
+//     line-height: 260px;
+// }
 
-.el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-}
+// .el-container:nth-child(7) .el-aside {
+//     line-height: 320px;
+// }
 .aside-nav {
     width: 260px;
     border-top: 1px solid #ddd;
