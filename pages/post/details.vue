@@ -38,6 +38,16 @@
                 </div>
                 <div class="cmt-wrapper">
                     <h4 class="cmt-title">评论</h4>
+                    <!-- 存放@标签 -->
+                    <el-tag
+                        :key="tag"
+                        v-for="tag in username"
+                        closable
+                        type="info"
+                        :disable-transitions="false"
+                        @close="handleClose(tag)"
+                    >@{{tag}}</el-tag>
+
                     <div class="cmt-input">
                         <el-input
                             type="textarea"
@@ -61,7 +71,11 @@
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <el-dialog :visible.sync="dialogFormVisible">
-                                 <img :src="`http://127.0.0.1:1337${urls}`" alt style="width:100%;height:100% ;" />
+                                <img
+                                    :src="`http://127.0.0.1:1337${urls}`"
+                                    alt
+                                    style="width:100%;height:100% ;"
+                                />
                             </el-dialog>
                         </div>
                         <div class="btn">
@@ -93,12 +107,16 @@
                                                 class="pic"
                                                 v-for="(items,index1) in item.pics"
                                                 :key="index1"
-                                                @click="imgBtn(items.url)">
+                                                @click="imgBtn(items.url)"
+                                            >
                                                 <img :src="`http://127.0.0.1:1337${items.url}`" alt />
                                             </div>
                                         </el-row>
                                         <div class="cmt-ctrl">
-                                            <nuxt-link to="#" v-show="isShow &&current===index">回复</nuxt-link>
+                                            <span
+                                                v-show="isShow &&current===index"
+                                                @click="huifu(item.account.nickname,item.id)"
+                                            >回复</span>
                                         </div>
                                     </div>
                                 </div>
@@ -173,16 +191,37 @@ export default {
             total: 0,
             //存储推荐文章数据
             postAsideDate: [],
-            urls:''
+            urls: "",
+            //用于存储用户名的
+            username: [],
+            idd: ""
         };
     },
     methods: {
-        imgBtn(urls){
+        huifu(val, item) {
+            this.username = [];
+            this.username.push(val);
+            this.idd = item;
+            console.log(this.idd);
+        },
+        handleClose(tag) {
+            this.username = [];
+        },
+        imgBtn(urls) {
             this.dialogFormVisible = true;
             this.urls = urls;
         },
         submitBtn() {
-            console.log(this.commentInfo);
+            if (
+                this.commentInfo.content === "" &&
+                this.commentInfo.pics.length === 0
+            ) {
+                this.$message.error("提交内容不能为空！！");
+                return;
+            } else if (this.idd === "") {
+                this.commentInfo.follow = this.idd;
+            }
+            // console.log(this.commentInfo);
             this.$axios({
                 url: "comments",
                 method: "post",
@@ -483,6 +522,9 @@ export default {
                 font-size: 12px;
                 color: #1e50a2;
                 text-align: right;
+                span {
+                    cursor: pointer;
+                }
             }
         }
     }
@@ -515,5 +557,9 @@ export default {
 /deep/ .el-upload-list__item {
     width: 100px;
     height: 100px;
+}
+/deep/ .el-tag {
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 </style>
