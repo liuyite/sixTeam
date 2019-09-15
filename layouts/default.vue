@@ -15,6 +15,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import url('//at.alicdn.com/t/font_1411728_0zof7rlfqig.css');
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
