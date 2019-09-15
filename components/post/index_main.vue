@@ -7,16 +7,16 @@
                 <h4 class="post-title">
                     <nuxt-link
                         data-v-2372b9a8
-                        :to="`/post/detail?id=${item.id}`"
+                        :to="`/post/details?id=${item.id}`"
                         class
                     >{{item.title}}</nuxt-link>
                 </h4>
                 <p class="post-desc">
-                    <nuxt-link :to="`/post/detail?id=${item.id}`">{{item.summary}}</nuxt-link>
+                    <nuxt-link :to="`/post/details?id=${item.id}`">{{item.summary}}</nuxt-link>
                 </p>
                 <el-row class="img-row">
                     <nuxt-link
-                        :to="`/post/detail?id=${item.id}`"
+                        :to="`/post/details?id=${item.id}`"
                         v-for="(imgs,index1) in item.images"
                         :key="index1"
                     >
@@ -51,16 +51,16 @@
 
             <div class="post-item flexed" v-if="item.images.length <3">
                 <div class="post-cover">
-                    <nuxt-link :to="`/post/detail?id=${item.id}`">
+                    <nuxt-link :to="`/post/details?id=${item.id}`">
                         <img :src="item.images[0]" alt />
                     </nuxt-link>
                 </div>
                 <div class="post-content">
                     <h4>
-                        <nuxt-link :to="`/post/detail?id=${item.id}`">{{item.title}}</nuxt-link>
+                        <nuxt-link :to="`/post/details?id=${item.id}`">{{item.title}}</nuxt-link>
                     </h4>
                     <p class="post-desc">
-                        <nuxt-link :to="`/post/detail?id=${item.id}`">{{item.summary}}</nuxt-link>
+                        <nuxt-link :to="`/post/details?id=${item.id}`">{{item.summary}}</nuxt-link>
                     </p>
                     <el-row class="post-info">
                         <div class="post-info-left">
@@ -217,6 +217,7 @@ export default {
         img {
             width: 220px;
             height: 100%;
+            object-fit: cover;
         }
     }
 }
