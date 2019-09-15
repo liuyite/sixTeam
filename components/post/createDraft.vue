@@ -8,8 +8,11 @@
             <div @click="backText(index)">
             {{ item.title }}
             <span>
-              <i class="el-icon-edit"></i>
-                <el-button
+              <i class="el-icon-edit"></i>            
+            </span>
+            </div>
+            <!-- 删除按钮 -->
+              <el-button
               type="danger"
               icon="el-icon-delete"
               circle
@@ -17,9 +20,6 @@
               @click="delDraft(index)"
               class="delbtn"
             ></el-button>
-            </span>
-            </div>
-          
           </div>
           <p>{{ item.date | timer }}</p>
         </div>
@@ -69,7 +69,8 @@ export default {
     },
     backText(index) {
         const one = this.$store.state.post.draft;
-        // console.log(one)
+        console.log(66666)
+        console.log(one)
         this.$emit('setDataList',one[index])
     }
   }
