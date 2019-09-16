@@ -58,7 +58,6 @@
             :data="hotelPrice"
             style="width: 100%"
              @row-click="openDetails"
-             row-style="target:_blank;"
              >
         <el-table-column
             prop="name"
@@ -252,12 +251,13 @@ export default {
         }).then(res=>{
             console.log(res)
             this.hotelData=res.data.data
+            this.score=this.hotelData[0].stars
             this.hotelPrice=res.data.data[0].products
 
             this.hotelPrice.forEach(e=>{
                 e.price=`￥ ${e.price} 起 >`
             })
-            this.score=hotelData[0].stars
+            
 
         }),
         
