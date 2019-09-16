@@ -56,22 +56,28 @@
       <div class="main_price">
         <el-table
             :data="hotelPrice"
-            style="width: 100%">
+            style="width: 100%"
+             @row-click="openDetails"
+             row-style="target:_blank;"
+             >
         <el-table-column
             prop="name"
             label="价格来源"
             width="420"
+            class="com"
             >
         </el-table-column>
         <el-table-column
             prop="bestType"
             label="低价房型"
             width="420"
+            class="com"
             >
         </el-table-column>
         <el-table-column
             prop="price"
             label="最低价格/每晚"
+            class="com"
             >
         </el-table-column>
         </el-table>
@@ -171,7 +177,7 @@
                               <i class="el-icon-star-on"></i>
                               <i class="el-icon-star-on"></i>
                               <i class="el-icon-star-off"></i>
-                              <span>4分</span>
+                              <span>{{score}}分</span>
                           </div>
                             
                           <div class="intro">
@@ -222,10 +228,14 @@ export default {
                 img:require('@/assets/hotel/6.png')
             }],  
             current:require('@/assets/hotel/6.png'),
-            activeName:'first',             
+            activeName:'first',
+            score:'',             
         }
     },
     methods:{
+        openDetails(row){
+            location.href="https://hotels.ctrip.com/hotel/694679.html"
+        },
         handleImg(item){
             this.current=item.img
         },
@@ -243,9 +253,11 @@ export default {
             console.log(res)
             this.hotelData=res.data.data
             this.hotelPrice=res.data.data[0].products
+
             this.hotelPrice.forEach(e=>{
                 e.price=`￥ ${e.price} 起 >`
             })
+            this.score=hotelData[0].stars
 
         }),
         
@@ -257,7 +269,7 @@ export default {
          var marker1 = new AMap.Marker({
                 position: new AMap.LngLat(118.8718107, 31.32846821),   
                 title: '好来阁酒店',
-                content: `<div style="width:20px; height:20px; border-radius: 40%; background:skyblue; color:#fff; line-height:20px; text-align:center;">🛏</div>`
+                content: `<div style="width:30px; height:30px; border-radius: 40%; background:skyblue; color:#fff; line-height:20px; text-align:center;">🛏</div>`
             });
             map.add([marker1])
         }
@@ -325,6 +337,14 @@ export default {
                 }
             }
         }
+    }
+    .main_price{
+           /deep/ .el-table__row{
+               
+                &:hover{
+                    cursor:pointer;
+                }
+            }
     }
     .map{
         margin: 40px 0;

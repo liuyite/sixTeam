@@ -61,7 +61,7 @@
         <!-- 右侧 -->
         <el-col class="web_price" :span="6">
           <div>
-            <nuxt-link to="https://hotels.ctrip.com/hotel/694679.html"  v-for="(item2,index2) in item.products"
+            <nuxt-link to="http://hotels.ctrip.com/hotel/694679.html"  v-for="(item2,index2) in item.products"
             :key="index2">
             <el-row class="recommend">
               <el-col :span="12">{{item2.name}}</el-col>
