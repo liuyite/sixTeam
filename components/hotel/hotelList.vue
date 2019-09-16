@@ -13,7 +13,7 @@
         </el-col>
         <el-col class="message" :span="10">
           <h4 class="hotel_cn-name">
-            <nuxt-link to="#">{{item.name}}</nuxt-link>
+            <nuxt-link :to="`/hotel/1?id=${item.id}`">{{item.name}}</nuxt-link>
           </h4>
           <div class="level" v-if="item.hotellevel">
             <span class="hotel_en_name">{{item.alias}}l</span>
@@ -141,6 +141,7 @@ export default {
         }
       }).then(res => {
         this.hotelData = res.data.data;
+        console.log(this.hotelData)
         // console.log(this.hotelData[0]);
         this.productData = res.data.data.products;
         // console.log(res);

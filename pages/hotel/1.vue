@@ -235,8 +235,9 @@ export default {
     mounted(){
         this.$axios({
             url:'/hotels',
+            baseURL:'http://157.122.54.189:9095',
             params:{
-                id:'1'
+                id:this.$route.query.id
             }
         }).then(res=>{
             console.log(res)
