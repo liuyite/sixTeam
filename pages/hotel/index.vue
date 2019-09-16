@@ -43,7 +43,7 @@ export default {
     setTimeout(() => {
       this.loading = false;
     }, 3000);
-    console.log(this.$route.query, "11");
+    // console.log(this.$route.query, "11");
     setTimeout(() => {
       this.$axios({
         url: `/hotels?&city=${this.$route.query.city}`,

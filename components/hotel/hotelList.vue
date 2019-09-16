@@ -61,7 +61,7 @@
         <!-- 右侧 -->
         <el-col class="web_price" :span="6">
           <div>
-            <nuxt-link to="https://hotels.ctrip.com/hotel/694679.html"  v-for="(item2,index2) in item.products"
+            <a :href="`https://hotels.ctrip.com/hotel/694679.html`"  v-for="(item2,index2) in item.products"
             :key="index2">
             <el-row class="recommend">
               <el-col :span="12">{{item2.name}}</el-col>
@@ -70,7 +70,7 @@
                   起
               </el-col> 
             </el-row>
-          </nuxt-link>
+          </a>
           </div>
         </el-col>
       </el-row>
@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     handleCurrentChange(val){
-      console.log(val)
+      // console.log(val)
       this.pageIndex = val
       this.init();
     },
@@ -142,12 +142,12 @@ export default {
         params:this.urlObj
       }).then(res => {
         this.hotelData = res.data.data;
-        console.log(this.hotelData)
+        // console.log(this.hotelData)
         // console.log(this.hotelData[0]);
         this.productData = res.data.data.products;
         // console.log(res);
         this.total=res.data.total;
-        console.log(this.total)
+        // console.log(this.total)
 
       });
     }

@@ -155,7 +155,7 @@ export default {
       // console.log(res, 11);
       // const { hotelassets, hotelbrand, hotellevel, hoteltype } = res.data.data;
       this.form = res.data.data;
-      console.log(this.form, 234);
+      // console.log(this.form, 234);
     });
   }
 };

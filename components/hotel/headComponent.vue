@@ -206,7 +206,7 @@ export default {
     // 出发城市下拉时触发
     // Select-点击选中建议项时触发
     handleDepartSelect(item) {
-      console.log(item);
+      // console.log(item);
       //   出发地名字
       this.form.departCity = item.value;
       this.form.city = item.id;
@@ -215,7 +215,7 @@ export default {
     },
     queryDepartSearch(value, callback) {
       // 聚焦不会下拉列表
-      console.log(value);
+      // console.log(value);
       if (!value) {
         //空值不出现下拉
         callback([]);
@@ -227,7 +227,7 @@ export default {
         // get发送
         params: { name: value }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         // 解构data
 
         // 遍历数组渲染
