@@ -415,7 +415,9 @@ export default {
     }
     .main_price{
            /deep/ .el-table__row{
-               
+           /deep/.el-table_1_column_3  {
+                    color: #fa3;
+                }
                 &:hover{
                     cursor:pointer;
                 }
