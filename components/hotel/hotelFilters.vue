@@ -20,13 +20,14 @@
       <el-col :span="6" style="padding-left:20px;padding-right:20px;border-right: 1px solid #ddd;">
         <div class="htb_text">住宿等级</div>
         <div>
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              不限
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown" v-model="grade" @click="handlehotle_grade"></el-dropdown-menu>
-          </el-dropdown>
+          <el-select v-model="hotelLevel" placeholder="不限" @change="handlehotle_levels">
+            <el-option
+              v-for="(item,index) in form.levels"
+              :key="index"
+              :label="item.name"
+              :value="item.level"
+            ></el-option>
+          </el-select>
         </div>
       </el-col>
 
@@ -34,13 +35,14 @@
       <el-col :span="6" style="padding-left:20px;padding-right:20px;border-right: 1px solid #ddd;">
         <div class="htb_text">住宿类型</div>
         <div>
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              不限
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown" v-model="type" @change="handlehotel_type"></el-dropdown-menu>
-          </el-dropdown>
+          <el-select v-model="hotelTypes" placeholder="不限" @change="handlehotel_type">
+            <el-option
+              v-for="(item,index) in form.types"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </div>
       </el-col>
 
@@ -48,13 +50,14 @@
       <el-col :span="6" style="padding-left:20px;padding-right:20px;border-right: 1px solid #ddd;">
         <div class="htb_text">住宿设施</div>
         <div>
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              不限
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown" v-model="facility" @change="handlehotel_facility"></el-dropdown-menu>
-          </el-dropdown>
+          <el-select v-model="hotelAssets" placeholder="不限" @change="handlehotel_assets">
+            <el-option
+              v-for="(item,index) in form.assets"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </div>
       </el-col>
 
@@ -62,13 +65,14 @@
       <el-col :span="6" style="padding-left:20px;padding-right:20px;">
         <div class="htb_text">住宿品牌</div>
         <div>
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              不限
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown" v-model="brand" @click="handlehotel_brand"></el-dropdown-menu>
-          </el-dropdown>
+          <el-select v-model="hotelBrands" placeholder="不限" @change="handlehotel_brands">
+            <el-option
+              v-for="(item,index) in form.brands"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </div>
       </el-col>
     </el-row>
@@ -80,10 +84,18 @@ export default {
   data() {
     return {
       prices: 4000,
-      grade: "", //等级
-      type: "", //类型
-      facility: "", //设施
-      brand: "" //品牌
+
+      hotelLevel: "",
+      hotelTypes: "",
+      hotelAssets: "",
+      hotelBrands: "",
+      form: {
+        // levels: [], // 酒店等级
+        // types: [], // 酒店类型
+        // assets: [], // 酒店设施
+        // brands: [] // 酒店品牌
+      },
+      hotelForm: {}
     };
   },
   methods: {
@@ -93,23 +105,58 @@ export default {
     },
     //失去焦点时触发
     changeSlider(val) {
-      this.$router.push(`/hotel?city=74&price_lt=${this.prices}`);
+      this.hotelForm.price_lt = this.prices;
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
     },
     //住宿等级
-    handlehotle_grade(value) {
-      this.$axios({
-        url: "/hotels",
-        baseURL: "http://157.122.54.189:9095"
-      }).then(res => {
-        console.log(res,'123');
+    handlehotle_levels(value) {
+      this.hotelForm.hotellevel = value;
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
       });
     },
     //住宿类型
-    handlehotel_type() {},
+    handlehotel_type(value) {
+      this.hotelForm.hoteltype = value;
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
+    },
     // 住宿设施
-    handlehotel_facility() {},
+    handlehotel_assets(value) {
+      this.hotelForm.hotelasset = value;
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
+    },
     // 住宿品牌
-    handlehotel_brand() {}
+    handlehotel_brands(value) {
+      this.hotelForm.hotelbrand = value;
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
+    }
+  },
+
+  mounted() {
+    // 发送axios请求
+    //获取筛选
+    this.hotelForm.city = this.$route.query.city;
+    this.$axios({
+      url: "/hotels/options"
+    }).then(res => {
+      // console.log(res, 11);
+      // const { hotelassets, hotelbrand, hotellevel, hoteltype } = res.data.data;
+      this.form = res.data.data;
+      console.log(this.form, 234);
+    });
   }
 };
 </script>
@@ -134,6 +181,7 @@ export default {
 .htb_text {
   margin-bottom: 10px;
   font-size: 14px;
+  text-align: center;
   //border-right: 1px solid #ddd;
 }
 .hotel_num {
@@ -144,5 +192,8 @@ export default {
 .el-dropdown-link {
   flex: 1;
   font-size: 13px;
+}
+.handleselect {
+  border: 1px solid #fff;
 }
 </style>

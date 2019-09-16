@@ -1,6 +1,6 @@
 <template>
   <div class="hotel">
-    <div class="container" v-loading="loading">
+    <div class="container" v-loading="loadings">
       <el-row
         type="flex"
         justify="space-between"
@@ -101,6 +101,7 @@ export default {
   },
   data() {
     return {
+      loadings:'',
       // value: 3.5,
       productData: [],
       hotelData: [
@@ -113,7 +114,8 @@ export default {
       //总条数
       total:0,
       //当前页
-      pageIndex:1
+      pageIndex:1,
+      urlObj:{}
     };
   },
   methods: {
@@ -127,18 +129,17 @@ export default {
       this.$router.push(val);
     },
     init(){
-      this.loading = true;
+      this.loadings = true;
+      this.urlObj._start=10*(this.pageIndex-1);
+      this.urlObj._limit=10;
       setTimeout(()=>{
-      this.loading = false;
+      this.loadings = false;
       },1500)
       this.$axios({
-        url: `hotels?city=${this.$route.query.city}`,
+        url: `hotels`,
          baseURL: "http://157.122.54.189:9095",
         method: "get",
-        params:{
-        _start: 10*(this.pageIndex-1),
-        _limit:10
-        }
+        params:this.urlObj
       }).then(res => {
         this.hotelData = res.data.data;
         console.log(this.hotelData)
@@ -153,12 +154,14 @@ export default {
   },
   watch:{
     $route(){
+      this.urlObj = this.$route.query
       this.init();
     }
   },
   mounted() {
     // console.log("hotels?&city=this.$route.query.city")
     setTimeout(() => {
+      this.loadings = this.loading
       this.init();
     }, 20);
   }

@@ -127,13 +127,20 @@ export default {
         title: "xx酒店",
         content: `<div style="width:20px; height:20px; border-radius: 50%; background:red; color:#fff; line-height:20px; text-align:center;">1</div>`
       });
+      
       var marker2 = new AMap.Marker({
         // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
         position: new AMap.LngLat(118.92251, 31.75561),
         title: "xx酒店"
       });
+
+      var marker3 = new AMap.Marker({
+        // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+        position: new AMap.LngLat(118.8718107, 31.32846821),
+        title: "xx酒店"
+      });
       // 将创建的点标记添加到已有的地图实例：
-      map.add([marker1, marker2]);
+      map.add([marker1, marker2,marker3]);
 
       //实时路况图层
       var trafficLayer = new AMap.TileLayer.Traffic({

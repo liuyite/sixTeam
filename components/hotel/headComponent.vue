@@ -47,7 +47,8 @@
                 placeholder="人数为定"
                 suffix-icon="el-icon-user-solid"
                 style="padding-bottom:12px"
-                @click.native="isshow=!isshow"
+                @focus="isshow=!isshow"
+                v-model="adultAndChildren"
               ></el-input>
             </el-form-item>
 
@@ -57,7 +58,7 @@
                 <span style="padding-left:5px;padding-right:30px;">每间:</span>
                 <el-select
                   v-model="value1"
-                  style="padding-left:5px;padding-right:5px;width:80px;"
+                  style="padding-left:5px;padding-right:5px;width:88px;"
                   size="mini"
                   placeholder="请选择"
                 >
@@ -74,7 +75,7 @@
 
                 <el-select
                   v-model="value2"
-                  style="padding-left:5px;padding-right:5px;width:80px;"
+                  style="padding-left:5px;padding-right:5px;width:88px;"
                   size="mini"
                   placeholder="请选择"
                 >
@@ -115,79 +116,91 @@
 
 <script>
 export default {
-   props:['data'],
+  props: ["data"],
   data() {
     return {
-     
       form: {
         departCity: "",
-        city:'' //出发城市
+        city: "" //出发城市
       },
-      hotel:'',
+      hotel: "",
       value: "",
+      person: "",
+      adultAndChildren: "",
       // 下拉菜单
       options1: [
         {
-          value1: "1",
+          value1: 1,
           label1: "1成人"
         },
         {
-          value1: "2",
-          label1: "1成人"
+          value1: 2,
+          label1: "2成人"
         },
         {
-          value1: "3",
+          value1: 3,
           label1: "3成人"
         },
         {
-          value1: "4",
+          value1: 4,
           label1: "4成人"
         },
         {
-          value1: "5",
+          value1: 5,
           label1: "5成人"
         },
         {
-          value1: "6",
+          value1: 6,
           label1: "6成人"
         }
       ],
       options2: [
         {
-          value2: "1",
+          value2: 0,
+          label2: "0儿童"
+        },
+        {
+          value2: 1,
           label2: "1儿童"
         },
         {
-          value2: "2",
+          value2: 2,
           label2: "2儿童"
         },
         {
-          value2: "3",
+          value2: 3,
           label2: "3儿童"
         },
         {
-          value2: "4",
+          value2: 4,
           label2: "4儿童"
         }
       ],
-      value1: "1成人",
-      value2: "0儿童",
+      value1: 1,
+      value2: 0,
       isshow: false
     };
   },
-  mounted(){
-   setTimeout(() =>{
-     if(!this.data){
-        this.form.departCity='南京市'
-     }else{
-       this.form.departCity =this.data
-     }
-      
-   },200)
+  mounted() {
+    setTimeout(() => {
+      if (!this.data) {
+        this.form.departCity = "南京市";
+      } else {
+        this.form.departCity = this.data;
+      }
+    }, 200);
   },
-    methods: {
+  methods: {
     //点击按钮
-    handlebutton() {},
+    handlebutton() {
+      this.adultAndChildren = `${this.value1}成人`;
+      this.person = this.value1;
+      if (this.value2) {
+        this.adultAndChildren += ` ${this.value2}儿童`;
+        this.person = this.value2;
+      }
+      this.isshow = false;
+    },
     // 卡片下拉
     handleCard() {},
     // 出发城市下拉时触发
@@ -197,12 +210,12 @@ export default {
       //   出发地名字
       this.form.departCity = item.value;
       this.form.city = item.id;
-      this.$router.push(`/hotel?city=${this.form.city}`)
-      this.hotel = item.value
+      this.$router.push(`/hotel?city=${this.form.city}`);
+      this.hotel = item.value;
     },
     queryDepartSearch(value, callback) {
       // 聚焦不会下拉列表
-      console.log(value)
+      console.log(value);
       if (!value) {
         //空值不出现下拉
         callback([]);
@@ -285,7 +298,7 @@ export default {
   }
 }
 // 人数未定
- /deep/ .el-card__body {
+/deep/ .el-card__body {
   margin-top: 10px;
   padding: 5px 0;
 }
