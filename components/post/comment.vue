@@ -14,7 +14,7 @@
                 </div>
             </el-row>
             <div class="cmt-ctrl">
-                <nuxt-link to="#" v-show="isShow &&current===data.level">回复</nuxt-link>
+                <span to="#" v-show="isShow &&current===data.level">回复</span>
             </div>
         </div>
         <comments :data="data.parent"></comments>
@@ -85,6 +85,9 @@ export default {
     font-size: 12px;
     color: #1e50a2;
     text-align: right;
+    span {
+        cursor: pointer;
+    }
 }
 .pic {
     width: 92px;
