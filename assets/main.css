@@ -13,3 +13,14 @@
     background:#409eff;
     height: 1px;
 }
+
+/* 清楚浮动 */
+.clearfix::after{
+    content:'';
+    clear:both;
+    display: block;
+    visibility: hidden;
+    height: 0;
+    line-height: 0;
+
+}
