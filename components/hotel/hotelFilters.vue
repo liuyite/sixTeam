@@ -147,6 +147,7 @@ export default {
 
   mounted() {
     // 发送axios请求
+    //获取筛选
     this.hotelForm.city = this.$route.query.city;
     this.$axios({
       url: "/hotels/options"
