@@ -4,7 +4,7 @@
       <div class="nav">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">酒店</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/' }">南京酒店</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{place}}酒店</el-breadcrumb-item>
             <el-breadcrumb-item  v-for="(item,index) in hotelData" :key="index">{{item.name}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -202,6 +202,11 @@
 export default {
     data(){
         return{
+            place:'',
+            creat:'',
+            renovat:'',
+            room:'',
+            score:'',  
             // 酒店数据
             hotelData:[],
 
@@ -233,11 +238,7 @@ export default {
             current:require('@/assets/hotel/6.png'),
 
             activeName:'first',
-
-            creat:'',
-            renovat:'',
-            room:'',
-            score:'',             
+           
         }
     },
     methods:{
@@ -261,6 +262,7 @@ export default {
         }).then(res=>{
             console.log(res)
             this.hotelData=res.data.data
+            this.place=this.hotelData[0].city.name.replace('市','')
             this.creat=this.hotelData[0].creation_time
             this.renovat=this.hotelData[0].renovat_time
             this.room=this.hotelData[0].roomCount
