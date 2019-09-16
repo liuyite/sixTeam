@@ -175,28 +175,28 @@
                 <div class="content_right el-col el-col-20">
                     <div class="score">
                         <div class="star">
-                            <!-- <el-rate
+                            <el-rate
                                 v-model="value"
                                 disabled
                                 show-score
                                 text-color="#ff9900"
                                 score-template="{value}分"
-                            ></el-rate>-->
+                            ></el-rate>
                         </div>
 
                         <div class="intro">推荐</div>
                     </div>
                     <div class="environment com">
                         <div>环境</div>
-                        <span>{{hotelData[0].scores.environment}}</span>
+                        <span>{{hotelData[0].scores.environment?hotelData[0].scores.environment:9.1}}</span>
                     </div>
                     <div class="product com">
                         <div>产品</div>
-                        <span>{{hotelData[0].scores.product}}</span>
+                        <span>{{hotelData[0].scores.product?hotelData[0].scores.product:8.8}}</span>
                     </div>
                     <div class="server com">
                         <div>服务</div>
-                        <span>{{hotelData[0].scores.service}}</span>
+                        <span>{{hotelData[0].scores.service?hotelData[0].scores.service:8.5}}</span>
                     </div>
                 </div>
             </div>
