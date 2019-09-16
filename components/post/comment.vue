@@ -2,7 +2,7 @@
     <div class="cmt-floor" v-if="data">
         <div class="cmt-content" @mouseenter="enter(data.level)" @mouseleave="leave(data.level)">
             <div class="cmt-info">
-                <img :src="`http://127.0.0.1:1337${data.account.defaultAvatar}`" alt />
+                <img :src="`http://157.122.54.189:9095${data.account.defaultAvatar}`" alt />
                 {{data.account.nickname}}
                 <i>{{data.updated_at | timer}}</i>
                 <span>{{data.level}}</span>
@@ -10,11 +10,11 @@
             <p class="cmt-message">{{data.content}}</p>
             <el-row>
                 <div class="pic" v-for="(items,index1) in data.pics" :key="index1">
-                    <img :src="`http://127.0.0.1:1337${items.url}`" alt />
+                    <img :src="`http://157.122.54.189:9095${items.url}`" alt />
                 </div>
             </el-row>
             <div class="cmt-ctrl">
-                <span to="#" v-show="isShow &&current===data.level">回复</span>
+                <span to="#" v-show="isShow &&current===data.level" @click="huifu(data)">回复</span>
             </div>
         </div>
         <comments :data="data.parent"></comments>
@@ -27,7 +27,11 @@ export default {
     name: "comments",
     data() {
         return {
-            isShow: false
+            isShow: false,
+            form:{
+                name:'',
+                follow:''
+            }
         };
     },
     props: ["data"],
@@ -37,6 +41,11 @@ export default {
         }
     },
     methods: {
+        huifu(item){
+            this.form.name = item.account.nickname
+            this.form.follow = item.id
+            this.$store.commit('comment/setAddcom',this.form);
+        },
         enter(index) {
             this.isShow = true;
             this.current = index;

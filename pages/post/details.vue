@@ -60,7 +60,7 @@
                     <div class="cmt-input-ctrls">
                         <div class="pct">
                             <el-upload
-                                action="http://127.0.0.1:1337/upload"
+                                action="http://157.122.54.189:9095/upload"
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
                                 :on-remove="handleRemove"
@@ -72,7 +72,7 @@
                             </el-upload>
                             <el-dialog :visible.sync="dialogFormVisible">
                                 <img
-                                    :src="`http://127.0.0.1:1337${urls}`"
+                                    :src="`http://157.122.54.189:9095${urls}`"
                                     alt
                                     style="width:100%;height:100% ;"
                                 />
@@ -88,7 +88,7 @@
                                 <div class="cmt-content">
                                     <div class="cmt-info">
                                         <img
-                                            :src="`http://127.0.0.1:1337${item.account.defaultAvatar}`"
+                                            :src="`http://157.122.54.189:9095${item.account.defaultAvatar}`"
                                             alt
                                         />
                                         {{item.account.nickname}}
@@ -109,13 +109,16 @@
                                                 :key="index1"
                                                 @click="imgBtn(items.url)"
                                             >
-                                                <img :src="`http://127.0.0.1:1337${items.url}`" alt />
+                                                <img
+                                                    :src="`http://157.122.54.189:9095${items.url}`"
+                                                    alt
+                                                />
                                             </div>
                                         </el-row>
                                         <div class="cmt-ctrl">
                                             <span
                                                 v-show="isShow &&current===index"
-                                                @click="huifu(item.account.nickname,item.id)"
+                                                @click="huifu(item)"
                                             >回复</span>
                                         </div>
                                     </div>
@@ -143,7 +146,7 @@
                 <div class="aside">
                     <h4>相关攻略</h4>
                     <nuxt-link
-                        to="/"
+                        :to="`/post/details?id=${item.id}`"
                         style="dispaly:block"
                         v-for="(item,index) in postAsideDate"
                         :key="index"
@@ -194,15 +197,38 @@ export default {
             urls: "",
             //用于存储用户名的
             username: [],
-            idd: ""
+            idd: "",
+            form: {
+                name: "",
+                follow: ""
+            }
         };
     },
-    methods: {
-        huifu(val, item) {
+    watch: {
+        "$store.state.comment.com": function() {
             this.username = [];
-            this.username.push(val);
-            this.idd = item;
-            console.log(this.idd);
+            this.username.push(this.$store.state.comment.com.name);
+            this.idd = this.$store.state.comment.com.follow;
+        },
+        $route() {
+            this.$axios({
+                url: "/posts",
+                params: {
+                    id: this.$route.query.id
+                }
+            }).then(res => {
+                this.postInfo = res.data.data[0];
+            });
+        }
+    },
+    methods: {
+        huifu(item) {
+            // this.username = [];
+            // this.username.push(val);
+            // this.idd = item;
+            this.form.name = item.account.nickname;
+            this.form.follow = item.id;
+            this.$store.commit("comment/setAddcom", this.form);
         },
         handleClose(tag) {
             this.username = [];
@@ -218,10 +244,8 @@ export default {
             ) {
                 this.$message.error("提交内容不能为空！！");
                 return;
-            } else if (this.idd === "") {
-                this.commentInfo.follow = this.idd;
             }
-            // console.log(this.commentInfo);
+            this.commentInfo.follow = this.idd;
             this.$axios({
                 url: "comments",
                 method: "post",
@@ -237,20 +261,18 @@ export default {
                     post: this.$route.query.id
                 };
                 this.$refs.upload.clearFiles();
+                this.pageIndex = 1;
+                this.username = [];
                 this.init();
             });
         },
         handleSuccess(response, file, fileList) {
-            console.log(response);
             this.commentInfo.pics.push(response[0]);
-            console.log(this.commentInfo);
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList, 321);
             this.commentInfo.pics = this.commentInfo.pics.filter(e => {
                 return e.name !== file.name;
             });
-            console.log(this.commentInfo);
         },
         handlePictureCardPreview(file) {
             this.dialogImageUrl = file.url;
@@ -294,7 +316,6 @@ export default {
             }).then(res => {
                 this.cData = res.data.data;
                 this.total = res.data.total;
-                console.log(this.cData);
             });
         },
         enter(index) {
@@ -325,7 +346,6 @@ export default {
                 }
             }).then(res => {
                 this.postInfo = res.data.data[0];
-                console.log(this.postInfo);
             });
 
             //推荐文章

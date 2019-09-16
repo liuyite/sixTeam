@@ -96,10 +96,12 @@ export default {
         }
     },
     mounted() {
+        if(this.$route.query.city){
+            this.searchInfo = this.$route.query.city;
+        }
         this.$axios({
             url: "/posts/cities"
         }).then(res => {
-            // console.log(res);
             this.menusList = res.data.data;
             this.menusList.forEach(e => {
                 this.menuChild.push(e.children);

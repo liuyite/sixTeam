@@ -62,15 +62,11 @@ export default {
   methods: {
     delDraft(index) {
     const arr = [...this.$store.state.post.draft]
-    // console.log(arr)
     arr.splice(index,1)
     this.$store.commit('post/setDraft',arr)
-    // console.log(arr)
     },
     backText(index) {
         const one = this.$store.state.post.draft;
-        console.log(66666)
-        console.log(one)
         this.$emit('setDataList',one[index])
     }
   }

@@ -30,9 +30,10 @@
                     <!-- 输入框 -->
                     <el-row type="flex" align="middle" class="search-input">
                         <input
+                        v-model="content"
                             :placeholder="options[current].placeholder"
                         />
-                        <i class="el-icon-search"></i>
+                        <i class="el-icon-search" @click="search(content)"></i>
                     </el-row>
                 </div>
             </div>
@@ -43,6 +44,7 @@
 export default {
     data() {
         return {
+            content:'',
             // 轮播图数据
             banners: [],
             options:[
@@ -76,6 +78,15 @@ export default {
         if(index===2){
           this.$router.push('/air')
         }
+      },
+      search(content){
+          console.log(content,this.current)
+          if(this.current===0){
+              this.$router.push(`/post?city=${content}`);
+          }
+          else if(this.current===1){
+              this.$router.push(`/hotel?city=74`);
+          }
       }
     }
 };

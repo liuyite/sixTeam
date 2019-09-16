@@ -33,7 +33,7 @@
                             by
                             <nuxt-link to="#">
                                 <img
-                                    :src="`http://127.0.0.1:1337${item.account.defaultAvatar}`"
+                                    :src="`http://157.122.54.189:9095${item.account.defaultAvatar}`"
                                     alt
                                 />
                             </nuxt-link>
@@ -72,7 +72,7 @@
                                 by
                                 <nuxt-link to="#">
                                     <img
-                                        :src="`http://127.0.0.1:1337${item.account.defaultAvatar}`"
+                                        :src="`http://157.122.54.189:9095${item.account.defaultAvatar}`"
                                         alt
                                     />
                                 </nuxt-link>
@@ -148,6 +148,9 @@ export default {
         }
     },
     mounted() {
+        if(this.$route.query.city){
+            this.urlCity = this.$route.query.city;
+        }
         this.init();
     },
     watch: {
