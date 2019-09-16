@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <template>
     <div class="index-main">
         <div v-for="(item,index) in content" :key="index">
@@ -309,4 +307,3 @@ export default {
     }
 }
 </style>
->>>>>>> 0e076315940a94b9832b6aeeb4585662dd65d542
