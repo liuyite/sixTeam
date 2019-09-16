@@ -180,17 +180,76 @@
                               推荐
                           </div>
                       </div>
-                        <div class="environment com">
+                      <div class="evaluate">
+                          <div class="environment">
                             <div>环境</div>
                             <span>7.8</span>
                         </div>
-                        <div class="product com">
+                        <div class="product">
                             <div>产品</div>
                             <span>7.8</span>
                         </div>
-                        <div class="server com">
+                        <div class="server">
                             <div>服务</div>
                             <span>7.8</span>
+                        </div>
+                      </div>
+                        <div style="width: 80px;height: 80px;margin-right:50px;">
+                            <svg viewBox="0 0 100 100">
+                                <path
+                                    d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0"
+                                    fill="none"
+                                    stroke="#e5e9f2"
+                                    stroke-width="5">
+                                ></path>
+                                <path
+                                    d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0"
+                                    fill="none"
+                                    stroke="#fa3"
+                                    stroke-linecap="round"
+                                    class="my-svg-path"
+                                    transform="rotate(90,50,50)"
+                                    stroke-width="5">
+                                </path>
+                            </svg>
+                        </div>
+                        <div style="width: 80px;height: 80px; margin-right:50px;">
+                            <svg viewBox="0 0 100 100">
+                                <path
+                                    d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0"
+                                    fill="none"
+                                    stroke="#e5e9f2"
+                                    stroke-width="5">
+                                ></path>
+                                <path
+                                    d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0"
+                                    fill="none"
+                                    stroke="#fa3"
+                                    stroke-linecap="round"
+                                    class="my-svg-path"
+                                    transform="rotate(90,50,50)"
+                                    stroke-width="5">
+                                </path>
+                            </svg>
+                        </div>
+                        <div style="width: 80px;height: 80px; margin-right:50px;">
+                            <svg viewBox="0 0 100 100">
+                                <path
+                                    d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0"
+                                    fill="none"
+                                    stroke="#e5e9f2"
+                                    stroke-width="5">
+                                ></path>
+                                <path
+                                    d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0"
+                                    fill="none"
+                                    stroke="#fa3"
+                                    stroke-linecap="round"
+                                    class="my-svg-path"
+                                    transform="rotate(90,50,50)"
+                                    stroke-width="5">
+                                </path>
+                            </svg>
                         </div>
                   </div>
               </div>
@@ -423,7 +482,8 @@ export default {
             padding: 20px 0;
             .content_right{
                 display: flex;
-                color: #fa3;               
+                color: #fa3;
+                position: relative;               
                     .score{
                         position: relative;
                         margin-right: 60px;
@@ -448,25 +508,41 @@ export default {
                             transform: rotate(-30deg)
                         }
                     }
-                    .com{
-                        width: 70px;
-                        height: 70px;
-                        line-height: 50px;
-                        text-align: center;
+                    .evaluate{
                         position: relative;
-                        border: 2px solid #fa3;
-                        border-radius: 50%;
-                        margin-right: 55px;
-                        span{
+                        .environment{
+                            width: 32px;
                             position: absolute;
                             top:20px;
-                            left:20px;
+                            left:23px;
+                            text-align: center;
+                        }
+                        .product{
+                            width: 32px;
+                            text-align: center;
+                            position: absolute;
+                            top:20px;
+                            left:153px;
+                        }
+                        .server{
+                            width: 32px;
+                            text-align: center;
+                            position: absolute;
+                            top:20px;
+                            left:283px;
                         }
                     }
-                    
+                    .my-svg-path{
+                        stroke-dasharray: 222.2px, 95.2px;
+                        stroke-dashoffset: 22px;
+                        transition: stroke-dashoffset 0.6s ease 0s, stroke          0.6s ease        0s;
+                        transform: rotateZ(20deg);
+                        transform-origin: 50% 50%;
+                    }     
                 }
             }
         }
+        
 }   
 
 </style>
