@@ -95,8 +95,7 @@ export default {
         // assets: [], // 酒店设施
         // brands: [] // 酒店品牌
       },
-      hotelForm:{
-      }
+      hotelForm: {}
     };
   },
   methods: {
@@ -108,46 +107,47 @@ export default {
     changeSlider(val) {
       this.hotelForm.price_lt = this.prices;
       this.$router.push({
-         url:'/hotel',
-         query:this.hotelForm
-       })
+        url: "/hotel",
+        query: this.hotelForm
+      });
     },
     //住宿等级
     handlehotle_levels(value) {
       this.hotelForm.hotellevel = value;
-       this.$router.push({
-         url:'/hotel',
-         query:this.hotelForm
-       })
-
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
     },
     //住宿类型
     handlehotel_type(value) {
       this.hotelForm.hoteltype = value;
-        this.$router.push({
-         url:'/hotel',
-         query:this.hotelForm
-       })
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
     },
     // 住宿设施
     handlehotel_assets(value) {
       this.hotelForm.hotelasset = value;
-        this.$router.push({
-         url:'/hotel',
-         query:this.hotelForm
-       })
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
     },
     // 住宿品牌
     handlehotel_brands(value) {
       this.hotelForm.hotelbrand = value;
-       this.$router.push({
-         url:'/hotel',
-         query:this.hotelForm
-       })
+      this.$router.push({
+        url: "/hotel",
+        query: this.hotelForm
+      });
     }
   },
+
   mounted() {
-    this.hotelForm.city = this.$route.query.city
+    // 发送axios请求
+    this.hotelForm.city = this.$route.query.city;
     this.$axios({
       url: "/hotels/options"
     }).then(res => {
