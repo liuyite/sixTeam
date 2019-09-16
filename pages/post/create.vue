@@ -6,49 +6,41 @@
         <p class="create-desc">分享你的个人游记，让更多人看到</p>
         <el-form class="main-content">
           <el-form-item class="content-form">
-            <el-input placeholder="请输入标题" class="content-title"></el-input>
+            <el-input placeholder="请输入标题" class="content-title" v-model="form.title"></el-input>
           </el-form-item>
           <!-- 富文本框 -->
           <el-form-item>
             <div class="conent-editor">
-              <VueEditor :config="config"  class="editorText"/>
+              <VueEditor :config="config" class="editorText" ref="vueEditor" />
             </div>
           </el-form-item>
           <!-- 选择城市 -->
           <el-form-item label="选择城市">
             <el-autocomplete
-            :fetch-suggestions="querySearchAsync"
-            @select="handleSelect"
+              :fetch-suggestions="querySearchAsync"
+              v-model="form.cityData"
+              @select="handleSelect"
             ></el-autocomplete>
           </el-form-item>
         </el-form>
         <!-- 发布或保存到草稿箱 -->
         <div class="create-button">
-            <!-- 按钮 -->
-            <el-button type="primary" size="small">发布</el-button>
-            <span class="submit-side">或者 
-                <nuxt-link to="#">保存到草稿箱</nuxt-link>
-            </span>
+          <!-- 按钮 -->
+          <el-button type="primary" size="small" @click="sendAddText">发布</el-button>
+          <span class="submit-side">
+            或者
+            <nuxt-link to="#" @click.native="handleSaveDratf">保存到草稿箱</nuxt-link>
+          </span>
         </div>
       </div>
-      <div class="draft">
-          <div class="draft-box">
-              <h4>草稿箱(1)</h4>
-              <div class="draft-list">
-                  <div class="draft-item">
-                      <div class="draft-post-title">
-                          熊大
-                          <span><i class="el-icon-edit"></i></span>
-                          <p>2019-09-12</p>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
+      <!-- 草稿箱 -->
+      <createDraft @setDataList="setDataList"></createDraft>
     </el-row>
   </div>
 </template>
 <script>
+import createDraft from "@/components/post/createDraft.vue";
+
 import "quill/dist/quill.snow.css";
 let VueEditor;
 
@@ -58,6 +50,17 @@ if (process.browser) {
 export default {
   data() {
     return {
+      form: {
+        // 标题
+        title: "",
+        // 富文本框内的内容
+        content: "",
+        // 城市
+        cityData: ""
+      },
+      dataArr: [],
+      // 存储后台返回城市的数组
+      departData: [],
       config: {
         modules: {
           // 工具栏
@@ -100,16 +103,114 @@ export default {
     };
   },
   components: {
-    VueEditor
+    VueEditor,
+    createDraft
   },
-  methods:{
-      // 返回输入建议的方法，仅当你的输入建议数据 resolve 时，通过调用 callback(data:[]) 来返回它 Function(queryString, callback)
-      querySearchAsync(queryString, cb){},
-
-      // select 选中 input 中的文字
-      handleSelect(item) {
-        console.log(item);
+  methods: {
+    // 返回输入建议的方法，仅当你的输入建议数据 resolve 时，通过调用 callback(data:[]) 来返回它 Function(queryString, callback)
+    querySearchAsync(value, cb) {
+      // 如果输入框内没有值，则不显示下拉框
+      if (!value) {
+        cb([]);
+        return;
       }
+      this.$axios({
+        url: "/airs/city",
+        params: {
+          name: value
+        }
+      }).then(res => {
+        //   console.log(res)
+
+        const { data } = res.data;
+        const newData = [];
+        data.forEach(e => {
+          e.value = e.name;
+          newData.push(e);
+        });
+
+        this.departData = newData;
+        // 显示在下来列表中
+        cb(newData);
+      });
+    },
+
+    // select 选中 input 中的文字
+    handleSelect(item) {
+      item = this.form.cityData;
+    },
+
+    //点击保存到草稿箱
+    handleSaveDratf() {
+      const { title } = this.form;
+
+      // 获取富文本框内的值，并赋值给form对象里面的content
+      this.form.content = this.$refs.vueEditor.editor.root.innerHTML;
+
+      // 标题不能为空
+      if (!title) {
+        this.$message.error("标题不能为空");
+        return;
+      }
+
+      // 获取实时时间
+      this.form.date = new Date();
+
+      // 调用store的方法，把this.form存到store中
+      this.$store.commit("post/setAddText", this.form);
+
+      // 点击保存草稿箱之后，重置标题和城市
+      this.form = {};
+
+      // 点击保存草稿箱之后，重置文本框的内容
+      this.$refs.vueEditor.editor.root.innerHTML = "";
+    },
+
+    // 接收子组件发射事件的值,然后渲染到页面
+    setDataList(arr) {
+      this.$set(this.form,'title',arr.title)
+      this.$refs.vueEditor.editor.root.innerHTML = arr.content;
+      this.$set(this.form,'cityData',arr.cityData)
+    },
+
+    // 发布文章
+    sendAddText() {
+      // 结构出所需要的值
+      const { cityData, title } = this.form;
+
+      // 获取富文本框内的值，并赋值给form对象里面的content
+      this.form.content = this.$refs.vueEditor.editor.root.innerHTML;
+
+      // 标题不能为空
+      if (!title) {
+        this.$message.error("标题不能为空");
+        return;
+      }
+
+      // 内容不能为空
+      if (!this.form.content) {
+        this.$message.error("内容不能为空");
+        return false;
+      }
+
+      // 城市不能为空
+      if (!cityData) {
+        this.$message.error("城市不能为空");
+        return;
+      }
+
+      // 发布之后，跳转到攻略首页
+      this.$router.push("/post");
+
+      // 提示新增成功
+      this.$message.success("新增成功");
+
+      // 点击保存草稿箱之后，重置标题和城市
+      this.form = {};
+
+      // 点击保存草稿箱之后，重置文本框的内容
+      this.$refs.vueEditor.editor.root.innerHTML = "";
+    }
   }
 };
 </script>
@@ -146,42 +247,15 @@ export default {
     }
   }
 }
- .editorText {
-      height: 330px;
-      margin-bottom: 50px;
-  }
+.editorText {
+  height: 330px;
+  margin-bottom: 50px;
+}
 .submit-side {
-    margin-left: 10px;
-    font-size: 14px;
-    > a {
-        color: orange;
-    }
-}
-
-.draft {
-    width: 200px;
-    .draft-box {
-        border: 1px #ddd solid;
-        padding: 10px;
-
-        h4 {
-            margin-bottom: 10px;
-            font-weight: normal;
-            color:#666;
-        }
-    }
-}
-
-.draft-item {
-    margin-bottom: 10px;
-    font-size: 14px;
-
-    .draft-post-title {
-        cursor: pointer;
-
-        p {
-             color:#999;
-        }
-    }
+  margin-left: 10px;
+  font-size: 14px;
+  > a {
+    color: orange;
+  }
 }
 </style>

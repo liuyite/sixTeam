@@ -5,7 +5,7 @@
     <el-row type="flex" justify class="option-row">
       <el-col :span="14">
         <!-- 区域 -->
-        <el-row type="flex" justify class="Area">
+        <el-row type="flex" class="Area">
           <el-col :span="3">
             区域
             <i class="el-icon-location"></i>
@@ -13,16 +13,17 @@
           </el-col>
           <el-col :span="21">
             <nuxt-link to="#" class="scenics-box">全部</nuxt-link>
-            <nuxt-link to="#">镇兴路沿线</nuxt-link>
-            <nuxt-link to="#">视觉艺术学院</nuxt-link>
-            <nuxt-link to="#">大成名店</nuxt-link>
-            <nuxt-link to="#">南京西站</nuxt-link>
-            <nuxt-link to="#">铜山镇</nuxt-link>
-            <nuxt-link to="#">大桥南路</nuxt-link>
-            <nuxt-link to="#">宝塔路沿线</nuxt-link>
-            <nuxt-link to="#">宝塔路/万辰苏果</nuxt-link>
-            <nuxt-link to="#">珠江路沿线</nuxt-link>
-            <nuxt-link to="#">华侨城</nuxt-link>
+            <div v-show="current">
+              <nuxt-link
+                :to="`/hotel?city=${$route.query.city}&scenic=${item.id}`"
+                style="padding:0 5px"
+                v-for="(item,index) in data"
+                :key="index"
+              >{{item.name}}</nuxt-link>
+            </div>
+            <div class="scenics-shrink">
+              <span @click="current=!current">等{{data.length}}个区域</span>
+            </div>
           </el-col>
         </el-row>
 
@@ -50,7 +51,7 @@
               content="等级均价由平日价格计算得出，节假日价格会有上浮。"
               placement="top-start"
             >
-              <i class="el-icon-warning"></i>
+              <i class="el-icon-warning iconstar"></i>
               <!-- <el-button>上左</el-button> -->
             </el-tooltip>:
           </el-col>
@@ -58,22 +59,22 @@
             <!-- 评分 -->
             <el-row type="flex" justify>
               <el-col :span="6">
-                <i class="el-icon-delete"></i>
-                <i class="el-icon-delete"></i>
-                <i class="el-icon-delete"></i>
+                <i class="iconfont iconhuangguan"></i>
+                <i class="iconfont iconhuangguan"></i>
+                <i class="iconfont iconhuangguan"></i>
                 <span>¥332</span>
               </el-col>
               <el-col :span="6">
-                <i class="el-icon-delete"></i>
-                <i class="el-icon-delete"></i>
-                <i class="el-icon-delete"></i>
-                <span>¥332</span>
+                <i class="iconfont iconhuangguan"></i>
+                <i class="iconfont iconhuangguan"></i>
+                <i class="iconfont iconhuangguan"></i>
+                <span>¥521</span>
               </el-col>
               <el-col :span="6">
-                <i class="el-icon-delete"></i>
-                <i class="el-icon-delete"></i>
-                <i class="el-icon-delete"></i>
-                <span>¥332</span>
+                <i class="iconfont iconhuangguan"></i>
+                <i class="iconfont iconhuangguan"></i>
+                <i class="iconfont iconhuangguan"></i>
+                <span>¥768</span>
               </el-col>
             </el-row>
           </el-col>
@@ -83,15 +84,33 @@
       <!-- 右边地图 -->
       <el-col :span="10">
         <!-- 插入地图 -->
-        <div id="container"></div>
+        <div id="container" v-loading="loading"></div>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    data: {
+      type: Array,
+      default:[{ scenic: [0] }]
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      current: true,
+      regionalList: []
+    };
+  },
+  methods: {
+    //点击收缩
+  },
   mounted() {
     // 等待下面url加载完毕之后再执行
     window.onLoad = function() {
@@ -157,6 +176,10 @@ export default {
       color: #666;
       font-size: 14px;
     }
+    .scenics-shrink {
+      max-height: 3em;
+      overflow: hidden;
+    }
   }
   // 攻略
   .Strategy {
@@ -179,5 +202,8 @@ export default {
 #container {
   width: 420px;
   height: 260px;
+}
+.iconhuangguan {
+  color: #f90;
 }
 </style>

@@ -7,7 +7,7 @@
             <el-row class="nav" type="flex">
                 <nuxt-link to="/">首页</nuxt-link>
                 <nuxt-link to="/post">旅游攻略</nuxt-link>
-                <nuxt-link to="/hotel">酒店</nuxt-link>
+                <nuxt-link to="/hotel?city=74">酒店</nuxt-link>
                 <nuxt-link to="/air">国内机票</nuxt-link>
                 <nuxt-link to="/hotel/1">酒店详情页(test)</nuxt-link>
             </el-row>
