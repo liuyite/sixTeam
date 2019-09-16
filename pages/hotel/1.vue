@@ -121,10 +121,10 @@
                     离店时间: 12:00之前
                 </div>
                 <div class="open miu">
-                    2010年开业 / 2015年装修
+                    {{creat}} / {{renovat}}
                 </div>
                 <div class="model miu">
-                    酒店规模: 148间客房
+                    酒店规模: {{room}}
                 </div>
             </div>
         </div>
@@ -133,10 +133,7 @@
                 主要设施
             </div>
             <div class="base_serve_right el-col el-col-20">
-                <span>外币兑换服务</span>
-                <span>电梯</span>
-                <span>洗衣服务</span>
-                <span>热水壶</span>
+                <span v-for="(item,index) in homeServe" :key="index">{{item.name}}</span>
             </div>
         </div>
         <div class="base_carpark el-row common">
@@ -205,9 +202,15 @@
 export default {
     data(){
         return{
+            // 酒店数据
             hotelData:[],
 
+            // 酒店价格表格数据
             hotelPrice:[],
+
+            // 酒店服务数据
+
+            homeServe:[],
             photo:[{
                 img:require('@/assets/hotel/1.png')
             },
@@ -226,12 +229,19 @@ export default {
             {
                 img:require('@/assets/hotel/6.png')
             }],  
+
             current:require('@/assets/hotel/6.png'),
+
             activeName:'first',
+
+            creat:'',
+            renovat:'',
+            room:'',
             score:'',             
         }
     },
     methods:{
+        
         openDetails(row){
             location.href="https://hotels.ctrip.com/hotel/694679.html"
         },
@@ -251,13 +261,17 @@ export default {
         }).then(res=>{
             console.log(res)
             this.hotelData=res.data.data
+            this.creat=this.hotelData[0].creation_time
+            this.renovat=this.hotelData[0].renovat_time
+            this.room=this.hotelData[0].roomCount
             this.score=this.hotelData[0].stars
-            this.hotelPrice=res.data.data[0].products
 
+            this.hotelPrice=res.data.data[0].products
             this.hotelPrice.forEach(e=>{
                 e.price=`￥ ${e.price} 起 >`
             })
-            
+
+            this.homeServe=res.data.data[0].hotelassets
 
         }),
         
